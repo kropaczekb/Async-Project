@@ -1,6 +1,7 @@
 <script>
   import app from '../../src/index';
   import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+  import Googlesignin from './Googlesignin.svelte';
 
   let email = '';
   let password = '';
@@ -23,3 +24,5 @@
   <input bind:value={password}>
   <button type="submit">Sign in</button>
 </form>
+<h3>or</h3>
+<Googlesignin />
