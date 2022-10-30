@@ -1,13 +1,47 @@
 <script>
-  let name = 'world';
+  import app from '../src/index'
+  import Googlesignin from './routes/Googlesignin.svelte';
+  import Signin from './routes/Signin.svelte';
+  import Signup from './routes/Signup.svelte';
+  import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+  import { Router, Route, Link } from "svelte-routing";
+  export let url = "";
+  let user;
+  let signedin;
+  const auth = getAuth(app)
   let envVariable = process.env.foo;
+  const loginObserver = (user) => {
+    if (user) {
+      signedin = true;
+    } else {
+      signedin = false;
+    }
+  }
+  onAuthStateChanged(auth, loginObserver);
 </script>
 
-<style>
-  h1{
-      color: tomato
-  }
-</style>
+<Router url="{url}">
+  <nav>
+    <Link to="/">Home</Link>
+    <Link to="signin">Sign in</Link>
+    <Link to="signup">Sign up</Link>
+  </nav>
+  <h1>Pixel Chat Rooms</h1>
+  <div>
+    <!-- <Route path="/"></Route> -->
+    <Route path="signin" component="{Signin}" />
+    <Route path="signup" component="{Signup}" />
+  </div>
+</Router>
 
-<h1>Hello {name}!</h1>
-<p>env variable: {envVariable}</p>
+
+<!--
+{#if signedin}
+  <a href=""
+  <button id="sign-out" on:click={() => signOut(auth)}>Sign out</button>
+{:else}
+  <Signin />
+  <Googlesignin />
+  <h4>or</h4>
+  <Signup />
+{/if} -->
