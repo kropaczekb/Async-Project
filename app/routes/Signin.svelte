@@ -11,6 +11,7 @@
       const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
       const user = userCredential.user
+      console.log(auth.currentUser);
     } catch (error) {
         console.error(error.code);
         console.error(error.message);

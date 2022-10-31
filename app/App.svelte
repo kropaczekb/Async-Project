@@ -3,10 +3,10 @@
   import Googlesignin from './routes/Googlesignin.svelte';
   import Signin from './routes/Signin.svelte';
   import Signup from './routes/Signup.svelte';
-  import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+  import { getAuth, onAuthStateChanged, signOut, updateCurrentUser } from 'firebase/auth';
   import { Router, Route, Link } from "svelte-routing";
   import Chatbox from './routes/Chatbox.svelte';
-  export let url = "";
+  export let url = "/";
   let user;
   let signedin;
   const auth = getAuth(app)
@@ -22,11 +22,17 @@
 </script>
 
 <Router url="{url}">
-  <nav>
+  <nav id="nav-bar">
     <h1>Pixel Chat Rooms</h1>
     <Link to="/">Home</Link>
+    {#if signedin}
+    <div>Hello {auth.currentUser.displayName}</div>
+    <img src={auth.currentUser.photoURL} alt="User" />
+    <button id="sign-out" on:click={() => signOut(auth)}>Sign out</button>
+    {:else}
     <Link to="signin">Sign in</Link>
     <Link to="signup">Sign up</Link>
+    {/if}
   </nav>
   <div>
     <!-- <Route path="/"></Route> -->
@@ -39,10 +45,16 @@
 <!--
 {#if signedin}
   <a href=""
-  <button id="sign-out" on:click={() => signOut(auth)}>Sign out</button>
 {:else}
   <Signin />
   <Googlesignin />
   <h4>or</h4>
   <Signup />
 {/if} -->
+
+<style>
+  #nav-bar {
+    display: flex;
+    background-color: grey;
+  }
+</style>

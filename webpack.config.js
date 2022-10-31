@@ -9,7 +9,8 @@ module.exports = {
   entry: '/app/main.js',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'public')
+    path: path.resolve(__dirname, 'public'),
+    // publicPath: '/public/'
   },
   module: {
     rules: [
@@ -44,8 +45,10 @@ module.exports = {
   },
   plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, 'public/index.html'),
-            inject: false,
+            hash: true,
+            template: path.resolve(__dirname, 'src/template.html'),
+            // inject: false,
+            title: 'AysncProject',
         }),
         new MiniCssExtractPlugin(),
         new Dotenv(),
