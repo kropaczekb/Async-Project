@@ -3,6 +3,7 @@
   import Googlesignin from './routes/Googlesignin.svelte';
   import Signin from './routes/Signin.svelte';
   import Signup from './routes/Signup.svelte';
+  import PixelArt from './routes/PixelArt.svelte'
   import { getAuth, onAuthStateChanged, signOut, updateCurrentUser } from 'firebase/auth';
   import { Router, Route, Link } from "svelte-routing";
   import Chatbox from './routes/Chatbox.svelte';
@@ -26,8 +27,10 @@
     <h1>Pixel Chat Rooms</h1>
     <Link to="/">Home</Link>
     {#if signedin}
-    <div>Hello {auth.currentUser.displayName}</div>
-    <img src={auth.currentUser.photoURL} alt="User" />
+      {#if auth.currentUser.displayName}
+        <div>Hello {auth.currentUser.displayName}</div>
+        <img src={auth.currentUser.photoURL} alt="User" />
+      {/if}
     <button id="sign-out" on:click={() => signOut(auth)}>Sign out</button>
     {:else}
     <Link to="signin">Sign in</Link>
@@ -35,26 +38,21 @@
     {/if}
   </nav>
   <div>
-    <!-- <Route path="/"></Route> -->
+    <Route path="/" component="{PixelArt}" />
     <Route path="signin" component="{Signin}" />
     <Route path="signup" component="{Signup}" />
   </div>
 </Router>
 <Chatbox />
 
-<!--
-{#if signedin}
-  <a href=""
-{:else}
-  <Signin />
-  <Googlesignin />
-  <h4>or</h4>
-  <Signup />
-{/if} -->
-
 <style>
   #nav-bar {
     display: flex;
     background-color: grey;
+  }
+  img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
   }
 </style>
