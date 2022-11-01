@@ -1,6 +1,7 @@
 <script>
   import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
   import app from '../../src/index';
+  import { navigate } from 'svelte-routing';
 
   const auth = getAuth(app)
   auth.languageCode = 'it';
@@ -13,6 +14,7 @@
     const credential = await GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
     const user = result.user;
+    navigate('/', { replace: true })
   }
 
 </script>

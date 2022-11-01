@@ -1,11 +1,11 @@
 <script>
-  import { ref, set, push, onValue, serverTimestamp, query, orderByChild, limitToLast, update } from 'firebase/database';
-  import { getDatabase } from 'firebase/database';
+  import { ref, set, push, onValue, serverTimestamp, query, orderByChild, limitToLast, update, getDatabase } from 'firebase/database';
   import app from '../../src/index'
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
   import { onMount } from 'svelte';
 
-  let rerenderValue = true;
+  const auth = getAuth();
+  let loggedin = false;
   let selectedColor = "red";
   let listOfColors;
   let height;
@@ -29,28 +29,40 @@
   })
 
   onMount(async () => {
+    const loginObserver = (user) => {
+      if (user) {
+        loggedin = true;
+      } else {
+        loggedin = false;
+      }
+    }
+    onAuthStateChanged(auth, loginObserver);
   })
 
   async function click(event) {
-    console.log("listofcolors", listOfColors)
-    let column = event.srcElement.cellIndex;
-    let row = event.srcElement.parentNode.rowIndex;
-    listOfColors.length = height;
-    for (let i = 0; i < listOfColors.length; i++){
-      if (listOfColors[i] === undefined) {
-        listOfColors[i] = new Array(width)
+    if (loggedin) {
+      console.log("listofcolors", listOfColors)
+      let column = event.srcElement.cellIndex;
+      let row = event.srcElement.parentNode.rowIndex;
+      listOfColors.length = height;
+      for (let i = 0; i < listOfColors.length; i++){
+        if (listOfColors[i] === undefined) {
+          listOfColors[i] = new Array(width)
+        }
+        listOfColors[i].length = width;
+        for (let j = 0; j < listOfColors[i].length; j++) {
+          if (!listOfColors[i][j]) {
+          listOfColors[i][j] = 'grey'
+        }}
       }
-      listOfColors[i].length = width;
-      for (let j = 0; j < listOfColors[i].length; j++) {
-        if (!listOfColors[i][j]) {
-        listOfColors[i][j] = 'grey'
-      }}
-    }
 
-    listOfColors[row][column] = selectedColor;
-    await set(colors, {
-      listOfColors
-    })
+      listOfColors[row][column] = selectedColor;
+      await set(colors, {
+        listOfColors
+      })
+    } else {
+      alert("Sign in to paint")
+    }
   }
 </script>
 

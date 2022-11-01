@@ -1,6 +1,7 @@
 <script>
   import app from '../../src/index';
   import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+  import { navigate } from 'svelte-routing';
   import Googlesignin from './Googlesignin.svelte';
 
   let email = '';
@@ -11,7 +12,7 @@
       const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
       const user = userCredential.user
-      console.log(auth.currentUser);
+      navigate('/', { replace: true })
     } catch (error) {
         console.error(error.code);
         console.error(error.message);

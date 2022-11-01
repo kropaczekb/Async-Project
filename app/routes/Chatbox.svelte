@@ -11,6 +11,7 @@
   const auth = getAuth(app)
   let listOfMessages = [];
   let username;
+  let loggedin = false
 
   onMount(async () => {
     const database = await getDatabase();
@@ -20,8 +21,10 @@
       const loginObserver = (user) => {
       if (user) {
         username = user.displayName;
+        loggedin = true;
       } else {
         username = null;
+        loggedin = false;
       }
     }
     onAuthStateChanged(auth, loginObserver);
@@ -33,14 +36,18 @@
   });
 
   async function sendMessage(messageInput) {
-    const message = messageInput;
-    messageInput = "";
-    let newMessage = push(messages);
-    await set(newMessage, {
-      name: username || "Anonymous",
-      text: message,
-      timestamp: serverTimestamp(),
-    })
+    if (loggedin) {
+      const message = messageInput;
+      messageInput = "";
+      let newMessage = push(messages);
+      await set(newMessage, {
+        name: username || "Anonymous",
+        text: message,
+        timestamp: serverTimestamp(),
+      })
+    } else {
+      alert("You must sign in to send messages")
+    }
   }
 </script>
 
