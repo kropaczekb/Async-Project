@@ -3,7 +3,7 @@
   import { getDatabase } from 'firebase/database';
   import app from '../../src/index'
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
-    import { onMount } from 'svelte';
+  import { onMount } from 'svelte';
 
   let messageInput = "";
   let messages;
